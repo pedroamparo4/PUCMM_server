@@ -9,7 +9,7 @@ namespace server
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             int? port = null;
             string path = string.Empty;
@@ -30,7 +30,7 @@ namespace server
                 catch
                 {
                     Console.WriteLine("The given value for PARAM [port] is not an integer");
-                    return;
+                    return 1;
                 }
                
             }
@@ -40,7 +40,13 @@ namespace server
                 if (string.IsNullOrEmpty(path))
                 {
                     Console.WriteLine("The given value for PARAM [path] cannot be empty");
-                    return;
+                    return 1;
+                }
+
+                if (!File.Exists(path))
+                {
+                    Console.WriteLine("The given path does not exist");
+                    return 1;
                 }
             }
 
@@ -56,9 +62,11 @@ namespace server
 
             Console.WriteLine("PORT: " + port);
             Console.WriteLine("PATH: " + path);
+
+            return 0;
         }
 
-
+      
     }
 }
 
