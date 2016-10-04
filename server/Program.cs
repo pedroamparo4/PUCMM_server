@@ -15,14 +15,33 @@ namespace server
             string path = string.Empty;
             int default_port = 80;
             string default_path = Directory.GetCurrentDirectory();
+            int port_index;
+            int path_index;
 
-            if (args.GetLength(0) > 0)
+            port_index = args.ToList().IndexOf("--port");
+            path_index = args.ToList().IndexOf("--path");
+
+            if (port_index > -1 && (port_index+1) < (args.Length))
             {
-                port = Convert.ToInt16(args[0]);
+                try
+                {
+                    port = Convert.ToInt16(args[port_index+1]);
+                }
+                catch
+                {
+                    Console.WriteLine("The given value for PARAM [port] is not an integer");
+                    return;
+                }
+               
             }
-            if (args.GetLength(0) > 1)
+            if (path_index > -1 && (path_index + 1) < (args.Length))
             {
-                path = args[1];
+                path = args[path_index + 1];
+                if (string.IsNullOrEmpty(path))
+                {
+                    Console.WriteLine("The given value for PARAM [path] cannot be empty");
+                    return;
+                }
             }
 
             if (port == null)
@@ -37,7 +56,9 @@ namespace server
 
             Console.WriteLine("PORT: " + port);
             Console.WriteLine("PATH: " + path);
-            Console.ReadLine();
         }
+
+
     }
 }
+
