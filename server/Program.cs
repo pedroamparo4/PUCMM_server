@@ -71,6 +71,11 @@ namespace server
             Console.WriteLine("PORT: " + port);
             Console.WriteLine("PATH: " + path);
 
+            while(true)
+            {
+
+            }
+
             return 0;
         }
 
