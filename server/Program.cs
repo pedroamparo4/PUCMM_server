@@ -43,7 +43,7 @@ namespace server
                     return 1;
                 }
 
-                if (!File.Exists(path))
+                if (!Directory.Exists(path))
                 {
                     Console.WriteLine("The given path does not exist");
                     return 1;
