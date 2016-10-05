@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,27 +13,27 @@ namespace server
         static int Main(string[] args)
         {
             int? port = null;
+            int aux;
             string path = string.Empty;
             int default_port = 80;
             string default_path = Directory.GetCurrentDirectory();
             int port_index;
             int path_index;
-
+            IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+            TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+            
             port_index = args.ToList().IndexOf("--port");
             path_index = args.ToList().IndexOf("--path");
 
             if (port_index > -1 && (port_index+1) < (args.Length))
             {
-                try
-                {
-                    port = Convert.ToInt16(args[port_index+1]);
-                }
-                catch
+                if(!int.TryParse(args[port_index + 1], out aux))
                 {
                     Console.WriteLine("The given value for PARAM [port] is not an integer");
                     return 1;
                 }
-               
+
+                port = aux;            
             }
             if (path_index > -1 && (path_index + 1) < (args.Length))
             {
@@ -58,6 +59,13 @@ namespace server
             if (string.IsNullOrEmpty(path))
             {
                 path = default_path;
+            }
+
+            var existing_port = tcpConnInfoArray.Where(p => p.LocalEndPoint.Port == port).FirstOrDefault();
+            if(existing_port != null)
+            {
+                Console.WriteLine($"PORT {port} is busy");
+                return 1;
             }
 
             Console.WriteLine("PORT: " + port);
