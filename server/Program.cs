@@ -83,7 +83,7 @@ namespace server
 
                 if(_input.Equals(SERVER_CORE.CORE._timestamp_command))
                 {
-                    Console.WriteLine("UPTIME: "+ (enviroment.App_Start_Timestamp - DateTime.Now).TotalMinutes);
+                    Console.WriteLine("UPTIME: "+ (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes+" minutes");
                 }
             }
 
