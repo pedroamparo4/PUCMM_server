@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace server.SERVER_CORE
 {
-    public static class CORE
+    public class HTTPServer
     {
-        public const string _timestamp_command = "uptime";
-       
+        public void Start() { }
+        public void Stop() { }
+        private HTTPServerState.STATE _server_state;
 
     }
 }

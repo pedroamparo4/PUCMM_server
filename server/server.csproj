@@ -48,6 +48,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SERVER_CORE\CORE.cs" />
     <Compile Include="SERVER_CORE\Enviroment.cs" />
+    <Compile Include="SERVER_CORE\HTTPServer.cs" />
+    <Compile Include="SERVER_CORE\HTTPServerState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
