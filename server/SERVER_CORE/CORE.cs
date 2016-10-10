@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace server.SERVER_CORE
 {
     public static class CORE
     {
         public const string _timestamp_command = "uptime";
-        const int default_port = 80;
+        public const int default_port = 80;
 
         public static bool PortIsAvailable(int? port)
         {
