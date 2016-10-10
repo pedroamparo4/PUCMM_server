@@ -86,7 +86,7 @@ namespace server
                     Console.WriteLine("UPTIME: "+ (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes+" minutes");
                 }
             }
-
+  
             return 0;
         }
 
