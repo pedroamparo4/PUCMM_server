@@ -22,6 +22,7 @@ namespace server
             SERVER_CORE.Enviroment enviroment = new SERVER_CORE.Enviroment();
             IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
             TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+            string _input; 
             
 
             port_index = args.ToList().IndexOf("--port");
@@ -77,7 +78,13 @@ namespace server
 
             while(true)
             {
+                _input = Console.ReadLine();
+                _input = _input.ToLower();
 
+                if(_input.Equals(SERVER_CORE.CORE._timestamp_command))
+                {
+                    Console.WriteLine("UPTIME: "+ (enviroment.App_Start_Timestamp - DateTime.Now).TotalMinutes);
+                }
             }
 
             return 0;
