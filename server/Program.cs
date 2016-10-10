@@ -19,9 +19,11 @@ namespace server
             string default_path = Directory.GetCurrentDirectory();
             int port_index;
             int path_index;
+            SERVER_CORE.Enviroment enviroment = new SERVER_CORE.Enviroment();
             IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
             TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
             
+
             port_index = args.ToList().IndexOf("--port");
             path_index = args.ToList().IndexOf("--path");
 
@@ -70,6 +72,8 @@ namespace server
 
             Console.WriteLine("PORT: " + port);
             Console.WriteLine("PATH: " + path);
+
+            
 
             while(true)
             {
