@@ -83,7 +83,19 @@ namespace server
 
                 if(_input.Equals(SERVER_CORE.CORE._timestamp_command))
                 {
-                    Console.WriteLine("UPTIME: "+ (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes+" minutes");
+                    switch(_input)
+                    {
+                        case SERVER_CORE.CORE._timestamp_command:
+                            Console.WriteLine("UPTIME: " + (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes + " minutes");
+                            break;
+
+                        case SERVER_CORE.CORE._stop_app_command:
+                            return 0;
+
+                        default: Console.WriteLine($"UNKNOWN COMMAND '{_input}'");
+                            break;
+                    }
+                    
                 }
             }
 

@@ -10,5 +10,7 @@ namespace server.SERVER_CORE
     {
         public const string _timestamp_command = "uptime";
 
+        public const string _stop_app_command = "quit-app";
+
     }
 }
