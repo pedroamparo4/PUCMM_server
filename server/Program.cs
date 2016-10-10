@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace server
 {
@@ -15,7 +12,6 @@ namespace server
             int? port = null;
             int aux;
             string path = string.Empty;
-            int default_port = 80;
             string default_path = Directory.GetCurrentDirectory();
             int port_index;
             int path_index;
@@ -54,7 +50,7 @@ namespace server
 
             if (port == null)
             {
-                port = default_port;
+                port = SERVER_CORE.CORE.default_port;
             }
 
             if (string.IsNullOrEmpty(path))
