@@ -19,9 +19,12 @@ namespace server
             string default_path = Directory.GetCurrentDirectory();
             int port_index;
             int path_index;
+            SERVER_CORE.Enviroment enviroment = new SERVER_CORE.Enviroment();
             IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
             TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+            string _input; 
             
+
             port_index = args.ToList().IndexOf("--port");
             path_index = args.ToList().IndexOf("--path");
 
@@ -71,9 +74,17 @@ namespace server
             Console.WriteLine("PORT: " + port);
             Console.WriteLine("PATH: " + path);
 
+            
+
             while(true)
             {
+                _input = Console.ReadLine();
+                _input = _input.ToLower();
 
+                if(_input.Equals(SERVER_CORE.CORE._timestamp_command))
+                {
+                    Console.WriteLine("UPTIME: "+ (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes+" minutes");
+                }
             }
 
             return 0;
