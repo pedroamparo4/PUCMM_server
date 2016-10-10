@@ -20,8 +20,6 @@ namespace server
             int port_index;
             int path_index;
             SERVER_CORE.Enviroment enviroment = new SERVER_CORE.Enviroment();
-            IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
-            TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
             string _input; 
             
 
@@ -64,8 +62,7 @@ namespace server
                 path = default_path;
             }
 
-            var existing_port = tcpConnInfoArray.Where(p => p.LocalEndPoint.Port == port).FirstOrDefault();
-            if(existing_port != null)
+            if(!SERVER_CORE.CORE.PortIsAvailable(port))
             {
                 Console.WriteLine($"PORT {port} is busy");
                 return 1;
