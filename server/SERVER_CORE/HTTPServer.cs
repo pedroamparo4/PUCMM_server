@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace server.SERVER_CORE
 {
-    public class HTTPServer
+    public class HTTPServer : IDisposable
     {
        
         private HTTPServerState.STATE _state;
         private IPEndPoint _endPoint;
         private TcpListener _listener;
         private int _port;
+        private bool _disposed = false;
 
         public HTTPServer(int port)
         {
@@ -38,7 +35,7 @@ namespace server.SERVER_CORE
             this._listener = null;
             this._state = HTTPServerState.STATE.STOPPED;
         }
-
+        
         public int Port
         {
             get { return this._port; }
@@ -49,6 +46,11 @@ namespace server.SERVER_CORE
         {
             get { return this._endPoint; }
             private set { this._endPoint = value; }
+        }
+
+        public void Dispose()
+        {
+            _disposed = true;
         }
 
     }
