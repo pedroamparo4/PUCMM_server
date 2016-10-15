@@ -6,8 +6,9 @@ namespace server.SERVER_CORE
 {
     public static class CORE
     {
-        public const string _timestamp_command = "uptime";
-        public const string _exit_app = "exit";
+        public const string _timestamp_minutes_running_command = "uptime";
+        public const string _exit_app_command = "exit";
+        public const string _timestamp_started_at_command = "uptime-attime";
         public const int _app_response_fail = 1;
         public const int _app_response_success = 0;
         public const int default_port = 80;

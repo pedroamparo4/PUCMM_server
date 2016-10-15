@@ -9,9 +9,9 @@ namespace server
     {
         static int Main(string[] args)
         {
-            int? port = null;
             bool server_is_running = true;
             string path = null;
+            int? port = null;
             string _input;
             SERVER_CORE.Enviroment enviroment = new SERVER_CORE.Enviroment(Directory.GetCurrentDirectory());
             SERVER_CORE.InitialParams parsed_params;
@@ -45,10 +45,9 @@ namespace server
             }
 
             Console.WriteLine("PORT: " + port);
-            Console.WriteLine("PATH: " + path);
+            Console.WriteLine("PATH: " + path);          
 
-            
-
+            //Infinite loop... until 'exit' command is typed
             while(server_is_running)
             {
                 _input = Console.ReadLine();
@@ -56,11 +55,15 @@ namespace server
 
                 switch(_input)
                 {
-                    case SERVER_CORE.CORE._timestamp_command:
+                    case SERVER_CORE.CORE._timestamp_minutes_running_command:
                         Console.WriteLine("UPTIME: " + (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes + " minutes");
                         break;
 
-                    case SERVER_CORE.CORE._exit_app:
+                    case SERVER_CORE.CORE._timestamp_started_at_command:
+                        Console.WriteLine($"UPTIME STARTED AT: {enviroment.App_Start_Timestamp.ToShortDateString()} | {enviroment.App_Start_Timestamp.ToShortTimeString()}");
+                        break;
+
+                    case SERVER_CORE.CORE._exit_app_command:
                         server_is_running = false;
                         break;
 
