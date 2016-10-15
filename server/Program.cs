@@ -68,7 +68,6 @@ namespace server
                         Console.WriteLine($"UNKNOWN COMMAND '{_input}'");
                         break;
                 }
-
             }
 
             return SERVER_CORE.CORE._app_response_success;
