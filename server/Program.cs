@@ -10,58 +10,38 @@ namespace server
         static int Main(string[] args)
         {
             int? port = null;
-            int aux;
-            string path = string.Empty;
-            string default_path = Directory.GetCurrentDirectory();
-            int port_index;
-            int path_index;
-            SERVER_CORE.Enviroment enviroment = new SERVER_CORE.Enviroment();
-            string _input; 
-            
+            bool server_is_running = true;
+            string path = null;
+            string _input;
+            SERVER_CORE.Enviroment enviroment = new SERVER_CORE.Enviroment(Directory.GetCurrentDirectory());
+            SERVER_CORE.InitialParams parsed_params;
 
-            port_index = args.ToList().IndexOf("--port");
-            path_index = args.ToList().IndexOf("--path");
-
-            if (port_index > -1 && (port_index+1) < (args.Length))
+            try
             {
-                if(!int.TryParse(args[port_index + 1], out aux))
-                {
-                    Console.WriteLine("The given value for PARAM [port] is not an integer");
-                    return 1;
-                }
-
-                port = aux;            
+                parsed_params = SERVER_CORE.CORE.ParseParams(args);
+                port = parsed_params._port;
+                path = parsed_params._path;
             }
-            if (path_index > -1 && (path_index + 1) < (args.Length))
+            catch(Exception e)
             {
-                path = args[path_index + 1];
-                if (string.IsNullOrEmpty(path))
-                {
-                    Console.WriteLine("The given value for PARAM [path] cannot be empty");
-                    return 1;
-                }
+                Console.WriteLine(e.Message);
+                return SERVER_CORE.CORE._app_response_fail;
+            }       
 
-                if (!Directory.Exists(path))
-                {
-                    Console.WriteLine("The given path does not exist");
-                    return 1;
-                }
-            }
-
-            if (port == null)
+            if (parsed_params._port == null)
             {
                 port = SERVER_CORE.CORE.default_port;
             }
 
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(parsed_params._path))
             {
-                path = default_path;
+                path = enviroment.DefaultPath;
             }
 
             if(!SERVER_CORE.CORE.PortIsAvailable(port))
             {
                 Console.WriteLine($"PORT {port} is busy");
-                return 1;
+                return SERVER_CORE.CORE._app_response_fail;
             }
 
             Console.WriteLine("PORT: " + port);
@@ -69,18 +49,29 @@ namespace server
 
             
 
-            while(true)
+            while(server_is_running)
             {
                 _input = Console.ReadLine();
                 _input = _input.ToLower();
 
-                if(_input.Equals(SERVER_CORE.CORE._timestamp_command))
+                switch(_input)
                 {
-                    Console.WriteLine("UPTIME: "+ (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes+" minutes");
+                    case SERVER_CORE.CORE._timestamp_command:
+                        Console.WriteLine("UPTIME: " + (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes + " minutes");
+                        break;
+
+                    case SERVER_CORE.CORE._exit_app:
+                        server_is_running = false;
+                        break;
+
+                    default:
+                        Console.WriteLine($"UNKNOWN COMMAND '{_input}'");
+                        break;
                 }
+
             }
-  
-            return 0;
+
+            return SERVER_CORE.CORE._app_response_success;
         }
 
       

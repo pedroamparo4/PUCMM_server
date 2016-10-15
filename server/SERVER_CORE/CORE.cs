@@ -1,5 +1,4 @@
-﻿
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 
@@ -8,6 +7,9 @@ namespace server.SERVER_CORE
     public static class CORE
     {
         public const string _timestamp_command = "uptime";
+        public const string _exit_app = "exit";
+        public const int _app_response_fail = 1;
+        public const int _app_response_success = 0;
         public const int default_port = 80;
 
         public static bool PortIsAvailable(int? port)
@@ -27,6 +29,42 @@ namespace server.SERVER_CORE
             }
 
             return true;
+        }
+
+        public static InitialParams ParseParams(string[] args)
+        {
+            int port_index;
+            int path_index;
+            int aux;
+            InitialParams initial_params = new InitialParams { _path = null, _port = null };
+
+            port_index = args.ToList().IndexOf("--port");
+            path_index = args.ToList().IndexOf("--path");
+
+            if (port_index > -1 && (port_index + 1) < (args.Length))
+            {
+                if (!int.TryParse(args[port_index + 1], out aux))
+                {
+                    throw new System.Exception("The given value for PARAM [port] is not an integer");
+                }
+
+                initial_params._port = aux;
+            }
+            if (path_index > -1 && (path_index + 1) < (args.Length))
+            {
+                initial_params._path = args[path_index + 1];
+                if (string.IsNullOrEmpty(initial_params._path))
+                {
+                    throw new System.Exception("The given value for PARAM [path] cannot be empty");
+                }
+
+                if (!Directory.Exists(initial_params._path))
+                {
+                    throw new System.Exception("The given path does not exist");
+                }
+            }
+
+            return initial_params;
         }
 
     }

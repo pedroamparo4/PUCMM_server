@@ -52,6 +52,7 @@
     <Compile Include="SERVER_CORE\HTTPServer.cs" />
     <Compile Include="SERVER_CORE\ClientState.cs" />
     <Compile Include="SERVER_CORE\HTTPServerState.cs" />
+    <Compile Include="SERVER_CORE\InitialParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
