@@ -4,7 +4,7 @@ namespace server.SERVER_CORE
 {
     public class HTTPClient
     {
-        private ClientState.STATE _client_state;
+        private ClientState.STATE _state;
 
         public HTTPClient()
         { }
