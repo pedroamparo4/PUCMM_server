@@ -11,7 +11,10 @@ namespace server.SERVER_CORE
         public const string _timestamp_started_at_command = "uptime-attime";
         public const int _app_response_fail = 1;
         public const int _app_response_success = 0;
-        public const int default_port = 80;
+        public const int _default_port = 80;
+        public const string _server_banner_name = "PUCMM_HTTP";
+        public const int _ReadBufferSize = 4096;
+        public const int _WriteBufferSize = 4096;
 
         public static bool PortIsAvailable(int? port)
         {
