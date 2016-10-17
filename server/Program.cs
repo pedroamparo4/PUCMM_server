@@ -30,7 +30,7 @@ namespace server
 
             if (parsed_params._port == null)
             {
-                port = SERVER_CORE.CORE.default_port;
+                port = SERVER_CORE.CORE._default_port;
             }
 
             if (string.IsNullOrEmpty(parsed_params._path))
