@@ -1,4 +1,5 @@
-﻿using System;
+﻿using server.SERVER_CORE;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -45,10 +46,13 @@ namespace server
             }
 
             Console.WriteLine("PORT: " + port);
-            Console.WriteLine("PATH: " + path);          
+            Console.WriteLine("PATH: " + path);
+
+            HTTPServer server = new HTTPServer((int)port);
+            server.Start();
 
             //Infinite loop... until 'exit' command is typed
-            while(server_is_running)
+            while (server_is_running)
             {
                 _input = Console.ReadLine();
                 _input = _input.ToLower();

@@ -34,7 +34,10 @@ namespace server.SERVER_CORE
             
         }
 
-        public void BeginRequest() { }
+        public void BeginRequest()
+        {
+            Console.WriteLine("Begin Request Called!");
+        }
 
         public void Dispose()
         {
