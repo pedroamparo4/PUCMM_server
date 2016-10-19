@@ -24,6 +24,7 @@ namespace server.SERVER_CORE
         private Dictionary<HTTPClient, bool> _clients = new Dictionary<HTTPClient, bool>();
         private AutoResetEvent _clientsChangedEvent = new AutoResetEvent(false);
 
+
         public HTTPServer(int port)
         {
             this._state = HTTPServerState.STATE.STOPPED;
@@ -36,7 +37,6 @@ namespace server.SERVER_CORE
             ReadTimeout = new TimeSpan(0, 1, 30);
             WriteTimeout = new TimeSpan(0, 1, 30);
             ShutdownTimeout = new TimeSpan(0, 0, 30);
-
         }
 
         private void BeginAcceptTcpClient()
@@ -70,7 +70,7 @@ namespace server.SERVER_CORE
                 client.BeginRequest();
                 BeginAcceptTcpClient();
             }
-            catch(ObjectDisposedException ex)
+            catch (ObjectDisposedException ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -119,7 +119,7 @@ namespace server.SERVER_CORE
 
         public event EventHandler StateChanged;
 
-        //You should handle the event delegate within the function. Remember to check if the event is null first.
+        // You should handle the event delegate within the function. Remember to check if the event is null first.
         protected virtual void OnChangedState(EventArgs args)
         {
             EventHandler handler = StateChanged;
