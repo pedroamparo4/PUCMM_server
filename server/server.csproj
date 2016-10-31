@@ -50,6 +50,8 @@
     <Compile Include="SERVER_CORE\Enviroment.cs" />
     <Compile Include="SERVER_CORE\ErrorHandling\ProtocolException.cs" />
     <Compile Include="SERVER_CORE\HTTPClient.cs" />
+    <Compile Include="SERVER_CORE\HttpCookie.cs" />
+    <Compile Include="SERVER_CORE\HttpCookieCollection.cs" />
     <Compile Include="SERVER_CORE\HttpMultiPartItem.cs" />
     <Compile Include="SERVER_CORE\HttpMultiPartRequestParser.cs" />
     <Compile Include="SERVER_CORE\HttpReadBuffer.cs" />
@@ -69,6 +71,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\InternalServerError.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
