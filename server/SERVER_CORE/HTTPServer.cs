@@ -12,14 +12,12 @@ namespace server.SERVER_CORE
     public class HTTPServer : IDisposable
     {
 
-        // Class private members
         private TcpListener _listener;
         private bool _disposed = false;
         private object _syncLock = new object();
         private Dictionary<HTTPClient, bool> _clients = new Dictionary<HTTPClient, bool>();
         private AutoResetEvent _clientsChangedEvent = new AutoResetEvent(false);
 
-        // Members used by Properties
         private HTTPServerState.STATE _state = HTTPServerState.STATE.STOPPED;
 
         #region Constructors
@@ -133,7 +131,7 @@ namespace server.SERVER_CORE
                 var client = new HTTPClient(this, tcpClient, ReadBufferSize, WriteBufferSize);
                 RegisterClient(client);
                 client.BeginRequest();
-                ////////listener.BeginAcceptTcpClient(AcceptTcpClientCallback, listener);
+                //listener.BeginAcceptTcpClient(AcceptTcpClientCallback, listener);
                 BeginAcceptTcpClient();
             }
             catch (ObjectDisposedException) { }
@@ -174,6 +172,85 @@ namespace server.SERVER_CORE
             return true;
         }
 
+        internal void RaiseRequest(HttpContext context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            OnRequestReceived(new HttpRequestEventArgs(context));
+        }
+
+        internal bool RaiseUnhandledException(HttpContext context, Exception exception)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            var e = new HttpExceptionEventArgs(context, exception);
+            OnUnhandledException(e);
+            return e.Handled;
+        }
+
+        private void StopClients()
+        {
+            var shutdownStarted = DateTime.Now;
+            bool forceShutdown = false;
+            // Clients that are waiting for new requests are closed.
+
+            List<HTTPClient> clients;
+            lock (_syncLock)
+            {
+                clients = new List<HTTPClient>(_clients.Keys);
+            }
+
+            foreach (var client in clients)
+            {
+                client.RequestClose();
+            }
+
+            // First give all clients a chance to complete their running requests.
+            while (true)
+            {
+                lock (_syncLock)
+                {
+                    if (_clients.Count == 0)
+                        break;
+                }
+
+                var shutdownRunning = DateTime.Now - shutdownStarted;
+
+                if (shutdownRunning >= ShutdownTimeout)
+                {
+                    forceShutdown = true;
+                    break;
+                }
+                _clientsChangedEvent.WaitOne(ShutdownTimeout - shutdownRunning);
+            }
+
+            if (!forceShutdown)
+                return;
+
+            // If there are still clients running after the timeout, their
+            // connections will be forcibly closed.
+            lock (_syncLock)
+            {
+                clients = new List<HTTPClient>(_clients.Keys);
+            }
+
+            foreach (var client in clients)
+            {
+                client.ForceClose();
+            }
+
+            // Wait for the registered clients to be cleared.
+            while (true)
+            {
+                lock (_syncLock)
+                {
+                    if (_clients.Count == 0)
+                        break;
+                }
+                _clientsChangedEvent.WaitOne();
+            }
+        }
+
         #endregion
 
         #region Protected Methods and Events
@@ -182,6 +259,26 @@ namespace server.SERVER_CORE
         protected virtual void OnChangedState(EventArgs args)
         {
             var ev = StateChanged;
+            if (ev != null)
+            {
+                ev(this, args);
+            }
+        }
+
+        public event HttpRequestEventHandler RequestReceived;
+        protected virtual void OnRequestReceived(HttpRequestEventArgs args)
+        {
+            var ev = RequestReceived;
+            if (ev != null)
+            {
+                ev(this, args);
+            }
+        }
+
+        public event HttpExceptionEventHandler UnhandledException;
+        protected virtual void OnUnhandledException(HttpExceptionEventArgs args)
+        {
+            var ev = UnhandledException;
             if (ev != null)
             {
                 ev(this, args);

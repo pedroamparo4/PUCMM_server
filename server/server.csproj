@@ -50,12 +50,20 @@
     <Compile Include="SERVER_CORE\Enviroment.cs" />
     <Compile Include="SERVER_CORE\ErrorHandling\ProtocolException.cs" />
     <Compile Include="SERVER_CORE\HTTPClient.cs" />
+    <Compile Include="SERVER_CORE\HttpContext.cs" />
     <Compile Include="SERVER_CORE\HttpCookie.cs" />
     <Compile Include="SERVER_CORE\HttpCookieCollection.cs" />
+    <Compile Include="SERVER_CORE\HttpExceptionEventArgs.cs" />
+    <Compile Include="SERVER_CORE\HttpFileCollection.cs" />
     <Compile Include="SERVER_CORE\HttpMultiPartItem.cs" />
     <Compile Include="SERVER_CORE\HttpMultiPartRequestParser.cs" />
+    <Compile Include="SERVER_CORE\HttpOutputStream.cs" />
+    <Compile Include="SERVER_CORE\HttpPostedFile.cs" />
     <Compile Include="SERVER_CORE\HttpReadBuffer.cs" />
+    <Compile Include="SERVER_CORE\HttpRequest.cs" />
+    <Compile Include="SERVER_CORE\HttpRequestEventArgs.cs" />
     <Compile Include="SERVER_CORE\HttpRequestParser.cs" />
+    <Compile Include="SERVER_CORE\HttpResponse.cs" />
     <Compile Include="SERVER_CORE\HTTPServer.cs" />
     <Compile Include="SERVER_CORE\ClientState.cs" />
     <Compile Include="SERVER_CORE\HTTPServerState.cs" />
@@ -65,6 +73,7 @@
     <Compile Include="SERVER_CORE\HttpUrlEncodedRequestParser.cs" />
     <Compile Include="SERVER_CORE\HttpUtil.cs" />
     <Compile Include="SERVER_CORE\InitialParams.cs" />
+    <Compile Include="SERVER_CORE\PHttpException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
