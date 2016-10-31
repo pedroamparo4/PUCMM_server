@@ -257,7 +257,7 @@ namespace server.SERVER_CORE
 
         internal void ExecuteRequest()
         {
-            Console.WriteLine("REQUEST METHOD HAS BEEN CALLED!");
+            Console.WriteLine("CALLING REQUEST....");
         }
 
         private void Reset()
