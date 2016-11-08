@@ -1,5 +1,6 @@
 ﻿using server.SERVER_CORE;
 using System;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 
@@ -14,24 +15,28 @@ namespace server
             string path = null;
             int? port = null;
             string _input;
-            SERVER_CORE.Enviroment enviroment = new SERVER_CORE.Enviroment(Directory.GetCurrentDirectory());
-            SERVER_CORE.InitialParams parsed_params;
+            Enviroment enviroment = new Enviroment(Directory.GetCurrentDirectory());
+            InitialParams parsed_params;
+            DBModel model = new DBModel();
+            model.CreatePeopleTable();
+
+
 
             try
             {
-                parsed_params = SERVER_CORE.CORE.ParseParams(args);
+                parsed_params = CORE.ParseParams(args);
                 port = parsed_params._port;
                 path = parsed_params._path;
             }
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
-                return SERVER_CORE.CORE._app_response_fail;
+                return CORE._app_response_fail;
             }       
 
             if (parsed_params._port == null)
             {
-                port = SERVER_CORE.CORE._default_port;
+                port = CORE._default_port;
             }
 
             if (string.IsNullOrEmpty(parsed_params._path))
@@ -59,15 +64,15 @@ namespace server
 
                 switch(_input)
                 {
-                    case SERVER_CORE.CORE._timestamp_minutes_running_command:
+                    case CORE._timestamp_minutes_running_command:
                         Console.WriteLine("UPTIME: " + (DateTime.Now - enviroment.App_Start_Timestamp).TotalMinutes + " minutes");
                         break;
 
-                    case SERVER_CORE.CORE._timestamp_started_at_command:
+                    case CORE._timestamp_started_at_command:
                         Console.WriteLine($"UPTIME STARTED AT: {enviroment.App_Start_Timestamp.ToShortDateString()} | {enviroment.App_Start_Timestamp.ToShortTimeString()}");
                         break;
 
-                    case SERVER_CORE.CORE._exit_app_command:
+                    case CORE._exit_app_command:
                         server_is_running = false;
                         break;
 
@@ -77,7 +82,7 @@ namespace server
                 }
             }
 
-            return SERVER_CORE.CORE._app_response_success;
+            return CORE._app_response_success;
         }
 
       
