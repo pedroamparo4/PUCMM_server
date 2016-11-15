@@ -580,6 +580,23 @@ namespace server
 
         };
 
+        private static readonly IDictionary<string, string> Routes = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) {
+        
+        #region Routes-File Map
+
+            {"/", Directory.GetCurrentDirectory()+@"\CRUD\" + "index.html"},
+            {"/index", Directory.GetCurrentDirectory()+@"\CRUD\" + "index.html"},
+            {"/partial", Directory.GetCurrentDirectory()+@"\CRUD\" + "partial.cshtml"},
+            {"/list", Directory.GetCurrentDirectory()+@"\CRUD\" + "list.cshtml"},
+            {"/insert", Directory.GetCurrentDirectory()+@"\CRUD\" + "list.cshtml"},
+            {"/delete", Directory.GetCurrentDirectory()+@"\CRUD\" + "list.cshtml"},
+            {"/create", Directory.GetCurrentDirectory()+@"\CRUD\" + "create.cshtml"},
+            {"/details", Directory.GetCurrentDirectory()+@"\CRUD\" + "details.cshtml"}
+
+        #endregion
+
+        };
+        static Enviroment enviroment;
         public static string GetMimeType(string extension)
         {
             if (extension == null)
@@ -597,17 +614,34 @@ namespace server
             return Mappings.TryGetValue(extension, out mime) ? mime : "application/octet-stream";
         }
 
+        static string View(string viewRoute, object model, dynamic viewData = null)
+        {
+            var layout = File.ReadAllText(enviroment.DefaultPath + @"\CRUD\layout.cshtml");
+            var partial = File.ReadAllText(viewRoute);
+
+            var partialTemplate = HandlebarsDotNet.Handlebars.Compile(new StringReader(partial));
+            HandlebarsDotNet.Handlebars.RegisterTemplate("body", partialTemplate);
+
+            var template = HandlebarsDotNet.Handlebars.Compile(layout);
+
+            // Model wrapper
+            var data = new { Model = model, ViewData = viewData };
+
+            // Transform template into valid HTML
+            return template(data);
+        }
+
         static int Main(string[] args)
         {
             bool server_is_running = true;
             string path = null;
             int? port = null;
             string _input;
-            Enviroment enviroment = new Enviroment(Directory.GetCurrentDirectory());
+            enviroment = new Enviroment(Directory.GetCurrentDirectory());
             InitialParams parsed_params;
             DBModel model = new DBModel();
             model.CreatePeopleTable();
-      
+     
 
             try
             {
@@ -676,6 +710,63 @@ namespace server
                         }
                     }
                 }
+                else if (Routes.ContainsKey(e.Request.Path))
+                {
+                    #region Valid Static Route
+                    using (var writer = new StreamWriter(e.Response.OutputStream))
+                    {
+                        string route;
+                        Routes.TryGetValue(e.Request.Path, out route);
+                        switch(e.Request.Path)
+                        {
+                            case "/insert":
+                                Console.WriteLine("Name: " + e.Request.Form.Get("name"));
+                                Console.WriteLine("LastName: " + e.Request.Form.Get("lastname"));
+                                string fstring;
+                                using (var fstream = e.Request.Files.Get("profilepic").InputStream as FileStream)
+                                {
+                                    fstring = e.Request.Files.Get("profilepic").ContentType
+                                        + ";base64, "
+                                        + Convert.ToBase64String(CORE.StreamToByteArray(fstream));
+                                }
+                                
+                                model.InsertPerson(e.Request.Form.Get("name"), e.Request.Form.Get("lastname"), fstring);
+                                break;
+
+                            case "/delete":
+                                Console.WriteLine("DELETE where ID: " + e.Request.Form.Get("id"));
+                                model.DeletePerson(e.Request.Form.Get("id"));
+                                break;
+
+                        }
+
+                        dynamic[] list = model.GetPeopleList().ToArray();
+                        dynamic details = model.GetPerson(e.Request.Form.Get("id"));
+
+                        string[] names = { "William", "George", "Pedro" };
+
+                        // Model data
+                        var dataModel = new
+                        {
+                            Names = names,
+                            List = list,
+                            Details = details
+                        };
+
+                        dynamic ViewBag = new DynamicDictionary();
+                        ViewBag.Title = "PUCMM";
+                        ViewBag.Person = new
+                        {
+                            Name = "Raul",
+                            LastName = "Roa"
+                        };
+
+                        writer.Write(View(route, dataModel, ViewBag));
+                    }
+                    #endregion
+                }
+
+
                 else
                 {
                     e.Response.Status = "404 Not Found";

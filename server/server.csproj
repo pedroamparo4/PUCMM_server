@@ -75,6 +75,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SERVER_CORE\CORE.cs" />
     <Compile Include="SERVER_CORE\DBModel.cs" />
+    <Compile Include="SERVER_CORE\DynamicDictionary.cs" />
     <Compile Include="SERVER_CORE\Enviroment.cs" />
     <Compile Include="SERVER_CORE\ErrorHandling\ProtocolException.cs" />
     <Compile Include="SERVER_CORE\HTTPClient.cs" />
